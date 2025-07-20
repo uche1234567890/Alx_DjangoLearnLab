@@ -1,17 +1,18 @@
 from django.shortcuts import render
 
 # Create your views here.
-from django.http import HttpResponse
+from django.shortcuts import render
 from .models import Book
 
 def list_books(request):
     books = Book.objects.select_related('author').all()
+    return render(request, "relationship_app/list_books.html", {"books": books})
 
-    if not books:
-        return HttpResponse("No books found.")
+from django.views.generic.detail import DetailView
+from .models import Library
 
-    output = "Books in Database:\n"
-    for book in books:
-        output += f"- {book.title} by {book.author.name}\n"
+class LibraryDetailView(DetailView):
+    model = Library
+    template_name = "relationship_app/library_detail.html"
+    context_object_name = "library"
 
-    return HttpResponse(output, content_type="text/plain")
