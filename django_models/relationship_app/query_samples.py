@@ -2,10 +2,10 @@ import os
 import django
 
 # Setup Django environment
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'your_project_name.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'relationship_app.settings')
 django.setup()
 
-from relationship_app.models import Author, Book, Library, Librarian
+from your_app.models import Author, Book, Library, Librarian  # replace 'your_app' with your actual app name
 
 # 1. Query all books by a specific author
 author_name = "John Doe"
