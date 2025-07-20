@@ -1,11 +1,10 @@
 import os
 import django
 
-# Set the correct Django settings module
+# Set up Django environment
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'LibraryProject.settings')
 django.setup()
 
-# Import your models
 from relationship_app.models import Author, Book, Library, Librarian
 
 # Query 1: All books by a specific author
@@ -34,9 +33,10 @@ except Library.DoesNotExist:
 
 print("\n" + "="*40 + "\n")
 
-# Query 3: Retrieve the librarian for a specific library
+# Query 3: Retrieve the librarian for a specific library (using library=)
 try:
-    librarian = Librarian.objects.get(library__name=library_name)
-    print(f"Librarian for {library_name}: {librarian.name}")
-except Librarian.DoesNotExist:
-    print(f"No librarian assigned to '{library_name}'.")
+    library = Library.objects.get(name=library_name)  # Get Library object first
+    librarian = Librarian.objects.get(library=library)  # Use library=
+    print(f"Librarian for {library.name}: {librarian.name}")
+except (Library.DoesNotExist, Librarian.DoesNotExist):
+    print(f"Librarian not found for '{library_name}'.")
