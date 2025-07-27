@@ -4,14 +4,12 @@ from django.utils.translation import gettext_lazy as _
 from .models import CustomUser, Book
 
 
-@admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
     list_display = ('title', 'author', 'publication_year')     # Shows these columns in the list view
     list_filter = ('publication_year', 'author')               # Adds filter sidebar for these fields
     search_fields = ('title', 'author')                        # Enables search by title or author
 
 
-@admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
     model = CustomUser
     list_display = (
@@ -36,3 +34,8 @@ class CustomUserAdmin(UserAdmin):
 
     search_fields = ('username', 'email', 'first_name', 'last_name')
     ordering = ('username',)
+
+
+# ✅ Explicit registrations (as required)
+admin.site.register(Book, BookAdmin)
+admin.site.register(CustomUser, CustomUserAdmin)
