@@ -9,39 +9,42 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# ------------------------------------------
+# ✅ SECURITY & DEPLOYMENT SETTINGS
+# ------------------------------------------
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-ua9g(3srq4lntiie4&rnz8oi&yh^=(6)!ih#um%xf%v3db_n$9'
 
-# SECURITY WARNING: don't run with debug turned on in production!
+# SECURITY WARNING: set this to False in production
 DEBUG = False
 
-# Hosts allowed to access the application
+# Allowed hosts for production
 ALLOWED_HOSTS = ['yourdomain.com', 'localhost', '127.0.0.1']
 
-# ------------------------------
-# 🔐 SECURITY SETTINGS
-# ------------------------------
-
-# Enforce HTTPS by redirecting all HTTP requests
+# ✅ Enforce HTTPS redirects
 SECURE_SSL_REDIRECT = True
 
-# Use HTTP Strict Transport Security (HSTS) to force HTTPS in browser
+# ✅ Enable HSTS (HTTP Strict Transport Security)
 SECURE_HSTS_SECONDS = 31536000  # 1 year
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 
-# Secure browser headers
-SECURE_BROWSER_XSS_FILTER = True  # Enable XSS filtering in browsers
-SECURE_CONTENT_TYPE_NOSNIFF = True  # Prevent content-type sniffing
-X_FRAME_OPTIONS = 'DENY'  # Prevent clickjacking by disallowing iframes
+# ✅ Trust HTTPS headers from a reverse proxy (e.g., Nginx, Heroku)
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-# Ensure cookies are only sent over HTTPS
-CSRF_COOKIE_SECURE = True
+# ✅ Secure cookies (only over HTTPS)
 SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 
-# ------------------------------
-# APPLICATION DEFINITION
-# ------------------------------
+# ✅ Additional browser security headers
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'
+
+# ------------------------------------------
+# ✅ APPLICATION DEFINITION
+# ------------------------------------------
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -63,22 +66,21 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'csp.middleware.CSPMiddleware',  # Enables CSP header injection
+    'csp.middleware.CSPMiddleware',  # Enables Content Security Policy headers
 ]
 
-# ------------------------------
-# CONTENT SECURITY POLICY (CSP)
-# ------------------------------
+# ------------------------------------------
+# ✅ CONTENT SECURITY POLICY (CSP)
+# ------------------------------------------
 
-# Control which resources the browser can load
 CSP_DEFAULT_SRC = ("'self'",)
 CSP_SCRIPT_SRC = ("'self'", "https://trusted.cdn.com")
 CSP_STYLE_SRC = ("'self'", "https://fonts.googleapis.com")
 CSP_IMG_SRC = ("'self'", "data:")
 
-# ------------------------------
-# TEMPLATES
-# ------------------------------
+# ------------------------------------------
+# ✅ TEMPLATES CONFIGURATION
+# ------------------------------------------
 
 ROOT_URLCONF = 'LibraryProject.urls'
 
@@ -99,9 +101,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'LibraryProject.wsgi.application'
 
-# ------------------------------
-# DATABASE
-# ------------------------------
+# ------------------------------------------
+# ✅ DATABASE
+# ------------------------------------------
 
 DATABASES = {
     'default': {
@@ -110,9 +112,9 @@ DATABASES = {
     }
 }
 
-# ------------------------------
-# PASSWORD VALIDATION
-# ------------------------------
+# ------------------------------------------
+# ✅ PASSWORD VALIDATION
+# ------------------------------------------
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -129,36 +131,36 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# ------------------------------
-# INTERNATIONALIZATION
-# ------------------------------
+# ------------------------------------------
+# ✅ INTERNATIONALIZATION
+# ------------------------------------------
 
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# ------------------------------
-# STATIC FILES
-# ------------------------------
+# ------------------------------------------
+# ✅ STATIC FILES
+# ------------------------------------------
 
 STATIC_URL = 'static/'
 
-# ------------------------------
-# DEFAULT PRIMARY KEY FIELD
-# ------------------------------
+# ------------------------------------------
+# ✅ PRIMARY KEY TYPE
+# ------------------------------------------
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# ------------------------------
-# CUSTOM USER MODEL
-# ------------------------------
+# ------------------------------------------
+# ✅ CUSTOM USER MODEL
+# ------------------------------------------
 
 AUTH_USER_MODEL = 'bookshelf.CustomUser'
 
-# ------------------------------
-# AUTH REDIRECTS
-# ------------------------------
+# ------------------------------------------
+# ✅ LOGIN/LOGOUT REDIRECTS
+# ------------------------------------------
 
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'list_books'
