@@ -1,0 +1,1 @@
+A simple Django-powered web application for managing books, authors, and library users. Designed for learning, scaling, and real-world deployment.
