@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}{{ object.title }} - Django Blog{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h2 class="card-title">{{ object.title }}</h2>
+        <p class="card-text">{{ object.content }}</p>
+        <p class="text-muted small mb-1">
+            By <strong>{{ object.author }}</strong> on {{ object.published_date|date:"M d, Y" }}
+        </p>
+
+        <!-- Edit/Delete buttons -->
+        {% if user == object.author %}
+            <a href="{% url 'post-update' object.pk %}" class="btn btn-sm btn-warning me-2">Edit</a>
+            <a href="{% url 'post-delete' object.pk %}" class="btn btn-sm btn-danger">Delete</a>
+        {% endif %}
+
+        <!-- Tags -->
+        <hr>
+        <p>
+            <strong>Tags:</strong>
+            {% for tag in object.tags.all %}
+                <a href="{% url 'posts-by-tag' tag.slug %}" class="badge bg-primary text-decoration-none">{{ tag.name }}</a>
+            {% empty %}
+                <span class="text-muted">No tags</span>
+            {% endfor %}
+        </p>
+    </div>
+</div>
+
+<!-- Comments Section -->
+<div class="mb-4">
+    <h4 class="mb-3">Comments</h4>
+    {% for comment in object.comments.all %}
+        <div class="border rounded p-3 mb-2">
+            <p class="mb-1"><strong>{{ comment.author }}</strong> said:</p>
+            <p>{{ comment.content }}</p>
+            <small class="text-muted">{{ comment.created_at|date:"F j, Y, g:i a" }}</small>
+            
+            {% if user == comment.author %}
+                <div class="mt-2">
+                    <a href="{% url 'comment-update' comment.pk %}" class="btn btn-sm btn-outline-warning me-2">Edit</a>
+                    <a href="{% url 'comment-delete' comment.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
+                </div>
+            {% endif %}
+        </div>
+    {% empty %}
+        <p class="text-muted">No comments yet. Be the first!</p>
+    {% endfor %}
+</div>
+
+<!-- Add Comment Form -->
+{% if user.is_authenticated %}
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title">Add a comment</h5>
+            <form method="POST" action="{% url 'add-comment' object.pk %}">
+                {% csrf_token %}
+                <div class="mb-3">
+                    {{ form.content }}
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+{% else %}
+    <p><a href="{% url 'login' %}" class="btn btn-outline-primary">Log in</a> to add a comment.</p>
+{% endif %}
+{% endblock %}
